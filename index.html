@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adhidev Suneesh — Software Engineer</title>
+<meta name="description" content="Adhidev Suneesh. Computer Science and Engineering (AI & ML) student building interactive web products with React, TypeScript and WebGL.">
+<style>
+  :root{
+    --bg:#0a0a0c; --ink:#ececee; --mute:#8d8d96; --faint:#4a4a52; --line:rgba(255,255,255,.09);
+    --accent:#cdbb94;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--accent);color:#111}
+
+  #gl{position:fixed;inset:0;width:100%;height:100%;z-index:-2;opacity:0;transition:opacity 1.6s ease}
+  .wash{position:fixed;inset:0;z-index:-1;pointer-events:none;
+        background:radial-gradient(ellipse 70% 60% at 72% 38%,rgba(205,187,148,.06),transparent 70%),
+                   linear-gradient(90deg,rgba(10,10,12,.55),transparent 55%)}
+  .grain{position:fixed;inset:-50%;z-index:60;pointer-events:none;opacity:.035;
+         background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+  /* nav */
+  header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+         padding:26px clamp(24px,6vw,84px);mix-blend-mode:difference}
+  .brand{font-family:var(--serif);font-size:1.05rem;letter-spacing:.01em}
+  nav{display:flex;gap:34px;font-size:.82rem;letter-spacing:.04em}
+  nav a{opacity:.7;transition:opacity .25s}
+  nav a:hover{opacity:1}
+  .fig{position:fixed;right:clamp(24px,6vw,84px);bottom:26px;z-index:50;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);pointer-events:none}
+  .bar{position:fixed;top:0;left:0;height:1px;width:0;background:var(--accent);z-index:70}
+
+  main{padding:0 clamp(24px,6vw,84px)}
+  section{max-width:1240px;margin:0 auto;padding:clamp(90px,14vh,170px) 0}
+  .eyebrow{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+  h2{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4.2vw,3.3rem);line-height:1.1;letter-spacing:-.015em;margin:16px 0 0;max-width:16ch}
+
+  /* hero */
+  #top{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:clamp(60px,12vh,130px)}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(3.2rem,9.2vw,8.2rem);line-height:.98;letter-spacing:-.03em;margin:22px 0 28px}
+  h1 em{font-style:italic;color:var(--accent)}
+  .lede{max-width:46ch;color:var(--mute);font-size:clamp(1rem,1.5vw,1.2rem)}
+  .actions{display:flex;gap:30px;margin-top:40px;align-items:center;flex-wrap:wrap}
+  .link{position:relative;padding-bottom:5px;font-size:.92rem;letter-spacing:.02em}
+  .link::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--ink);transform-origin:left;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+  .link:hover::after{transform:scaleX(.35)}
+  .link.soft{color:var(--mute)}.link.soft::after{background:var(--faint)}
+  .meta{position:absolute;right:clamp(24px,6vw,84px);bottom:clamp(60px,12vh,130px);text-align:right;font-size:.74rem;letter-spacing:.14em;color:var(--faint);line-height:1.9;text-transform:uppercase}
+
+  .in{opacity:0;transform:translateY(18px);animation:in 1.1s cubic-bezier(.2,.8,.2,1) forwards}
+  @keyframes in{to{opacity:1;transform:none}}
+
+  /* work list */
+  .head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:64px;flex-wrap:wrap}
+  .head p{max-width:38ch;color:var(--mute)}
+  .row{display:grid;grid-template-columns:70px 1.1fr 1.6fr 120px;gap:30px;padding:34px 0;border-top:1px solid var(--line);align-items:start;transition:padding .5s cubic-bezier(.2,.8,.2,1)}
+  .row:last-child{border-bottom:1px solid var(--line)}
+  .row:hover{padding-left:14px}
+  .row .n{font-size:.78rem;color:var(--faint);letter-spacing:.1em;padding-top:8px}
+  .row h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.3vw,2rem);line-height:1.2;letter-spacing:-.01em}
+  .row h3 small{display:block;margin-top:8px;font-family:var(--sans);font-size:.74rem;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+  .row p{color:var(--mute);font-size:.96rem}
+  .row ul{margin-top:14px;display:grid;gap:7px;list-style:none}
+  .row li{color:var(--mute);font-size:.9rem;padding-left:18px;position:relative}
+  .row li::before{content:"";position:absolute;left:0;top:.8em;width:8px;height:1px;background:var(--faint)}
+  .tags{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:16px;font-size:.78rem;color:var(--faint)}
+  .yr{text-align:right;font-size:.8rem;color:var(--faint);padding-top:8px;letter-spacing:.08em}
+
+  /* capabilities */
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:44px 56px;margin-top:70px}
+  .col h4{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:500;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .col li{list-style:none;color:var(--mute);padding:5px 0;font-size:.95rem}
+
+  /* education */
+  .two{display:grid;grid-template-columns:1fr 1.3fr;gap:clamp(40px,8vw,120px);align-items:start}
+  .edu h3{font-family:var(--serif);font-weight:400;font-size:1.6rem;line-height:1.25;margin:20px 0 10px}
+  .edu p,.honors li{color:var(--mute)}
+  .honors{list-style:none;display:grid;gap:0}
+  .honors li{padding:18px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;font-size:.95rem}
+  .honors li:last-child{border-bottom:1px solid var(--line)}
+  .honors span{color:var(--faint);font-size:.8rem;white-space:nowrap;letter-spacing:.06em}
+
+  /* contact */
+  #contact{padding-bottom:70px}
+  .mail{display:inline-block;font-family:var(--serif);font-size:clamp(1.7rem,5.4vw,4.6rem);line-height:1.1;letter-spacing:-.02em;margin:34px 0 46px;border-bottom:1px solid var(--faint);padding-bottom:10px;transition:color .3s,border-color .3s}
+  .mail:hover{color:var(--accent);border-color:var(--accent)}
+  .socials{display:flex;gap:34px;flex-wrap:wrap}
+  footer{max-width:1240px;margin:0 auto;padding:40px 0 50px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:.76rem;color:var(--faint);letter-spacing:.06em;flex-wrap:wrap;gap:12px}
+
+  .rv{opacity:0;transform:translateY(26px);transition:opacity 1s cubic-bezier(.2,.8,.2,1),transform 1s cubic-bezier(.2,.8,.2,1)}
+  .rv.on{opacity:1;transform:none}
+
+  @media(max-width:860px){
+    nav{gap:20px}.meta{display:none}
+    .row{grid-template-columns:1fr;gap:12px}.row .n,.yr{display:none}
+    .two{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.in,.rv{opacity:1;transform:none}#gl{opacity:1}}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div class="grain"></div>
+<canvas id="gl"></canvas>
+<div class="wash"></div>
+<div class="fig" id="fig">Fig. 01 — Sphere</div>
+
+<header>
+  <a class="brand" href="#top">Adhidev Suneesh</a>
+  <nav>
+    <a href="#work">Work</a>
+    <a href="#capabilities">Capabilities</a>
+    <a href="#background">Background</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section id="top">
+    <div class="eyebrow in" style="animation-delay:.2s">Software engineer · AI &amp; Machine Learning</div>
+    <h1 class="in" style="animation-delay:.35s">Adhidev<br><em>Suneesh</em></h1>
+    <p class="lede in" style="animation-delay:.55s">I design and build interactive web products where careful engineering meets a considered interface. Currently reading Computer Science and Engineering at Lovely Professional University.</p>
+    <div class="actions in" style="animation-delay:.75s">
+      <a class="link" href="#work">Selected work</a>
+      <a class="link soft" href="assets/Adhidev_Suneesh_CV.pdf" download>Curriculum vitae</a>
+      <a class="link soft" href="#contact">Get in touch</a>
+    </div>
+    <div class="meta in" style="animation-delay:.95s">Kerala, India<br>Open to internships<br>2026</div>
+  </section>
+
+  <section id="work">
+    <div class="head">
+      <div class="rv"><div class="eyebrow">Selected work</div><h2>Built, shipped and deployed.</h2></div>
+      <p class="rv">A hackathon finalist project, professional internship work and tools I use every day.</p>
+    </div>
+
+    <article class="row rv">
+      <div class="n">01</div>
+      <h3>BIFROST<small>Unified campus super-app</small></h3>
+      <div>
+        <p>Led a team of three through two elimination rounds into the finals of the 38-hour Code Flux Hackathon at Coding Blocks LPU.</p>
+        <ul>
+          <li>Interactive 3D campus navigation using WebGL and the Google Maps API for real-time wayfinding between university blocks.</li>
+          <li>Supabase backend with secure authentication, real-time schemas and multi-device synchronisation.</li>
+          <li>Lost and found registry, e-cart booking and student services, deployed live on Netlify.</li>
+        </ul>
+        <div class="tags"><span>React</span><span>TypeScript</span><span>WebGL</span><span>Google Maps API</span><span>Supabase</span><span>Netlify</span></div>
+      </div>
+      <div class="yr">2025</div>
+    </article>
+
+    <article class="row rv">
+      <div class="n">02</div>
+      <h3>Inamigos Foundation<small>AI web development intern</small></h3>
+      <div>
+        <p>Built and deployed interactive web applications supporting donor engagement and digital fundraising for an NGO.</p>
+        <ul>
+          <li>Shipped production apps to Vercel.</li>
+          <li>Integrated RESTful endpoints into responsive interfaces.</li>
+          <li>Improved asset loading and delivery speed within distributed team sprints.</li>
+        </ul>
+        <div class="tags"><span>Vercel</span><span>REST APIs</span><span>Frontend</span></div>
+      </div>
+      <div class="yr">Jun–Jul 2026</div>
+    </article>
+
+    <article class="row rv">
+      <div class="n">03</div>
+      <h3>JARVIS<small>Voice-driven desktop assistant</small></h3>
+      <div>
+        <p>A personal assistant with a wake word, spoken responses, a live task list and a news feed, connected to Gmail and Google Calendar.</p>
+        <div class="tags"><span>Python</span><span>Speech interfaces</span><span>AI agents</span></div>
+      </div>
+      <div class="yr">2026</div>
+    </article>
+
+    <article class="row rv">
+      <div class="n">04</div>
+      <h3>Portfolio &amp; showcase<small>Personal site</small></h3>
+      <div>
+        <p>A responsive portfolio with a filterable skills matrix and dynamic project showcases, deployed through automated Netlify workflows.</p>
+        <div class="tags"><span>React</span><span>JavaScript</span><span>CSS3</span><span>Netlify</span></div>
+      </div>
+      <div class="yr">2026</div>
+    </article>
+  </section>
+
+  <section id="capabilities">
+    <div class="rv"><div class="eyebrow">Capabilities</div><h2>Tools I reach for.</h2></div>
+    <div class="cols rv">
+      <div class="col"><h4>Languages</h4><ul><li>JavaScript &amp; TypeScript</li><li>Python</li><li>Java</li><li>C#</li><li>SQL</li><li>HTML5 &amp; CSS3</li></ul></div>
+      <div class="col"><h4>Frontend &amp; graphics</h4><ul><li>React</li><li>WebGL &amp; Three.js</li><li>Responsive design</li><li>UI/UX prototyping</li></ul></div>
+      <div class="col"><h4>Backend &amp; cloud</h4><ul><li>Node.js</li><li>Supabase</li><li>Firebase</li><li>RESTful APIs</li></ul></div>
+      <div class="col"><h4>Workflow</h4><ul><li>Git &amp; GitHub</li><li>Vercel &amp; Netlify</li><li>Claude CLI, ChatGPT, Gemini</li></ul></div>
+    </div>
+  </section>
+
+  <section id="background">
+    <div class="two">
+      <div class="edu rv">
+        <div class="eyebrow">Education</div>
+        <h3>B.Tech, Computer Science &amp; Engineering (AI &amp; ML)</h3>
+        <p>Lovely Professional University, Punjab. Expected graduation June 2030.</p>
+        <p style="margin-top:14px">LPUNEST merit scholarship, a 40% tuition waiver.</p>
+      </div>
+      <div class="rv">
+        <div class="eyebrow" style="margin-bottom:22px">Recognition &amp; certification</div>
+        <ul class="honors">
+          <li>Finalist, Code Flux 38-hour Hackathon <span>2025</span></li>
+          <li>HackerRank Software Engineer certification <span>2026</span></li>
+          <li>HackerRank Software Engineer Intern certification <span>2026</span></li>
+          <li>HackerRank C# (Basic) <span>2026</span></li>
+          <li>Python Foundations, Great Learning <span>2026</span></li>
+          <li>Vocational Speaking, Trinity College London <span></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="eyebrow rv">Contact</div>
+    <h2 class="rv">Open to internships and collaboration.</h2>
+    <a class="mail rv" href="mailto:theadhidevsuneesh@gmail.com">theadhidevsuneesh@gmail.com</a>
+    <div class="socials rv">
+      <a class="link" href="https://linkedin.com/in/theadhidevsuneesh" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="link" href="https://github.com/theadhidevsuneesh-prog" target="_blank" rel="noopener">GitHub</a>
+      <a class="link soft" href="assets/Adhidev_Suneesh_CV.pdf" download>Curriculum vitae</a>
+    </div>
+  </section>
+</main>
+<footer><span>© 2026 Adhidev Suneesh</span><span>Kerala, India</span></footer>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+
+const canvas=document.getElementById('gl'),fig=document.getElementById('fig');
+let renderer=null;
+try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});}catch(e){console.warn('WebGL unavailable',e)}
+if(renderer){
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(40,1,.1,100);cam.position.set(0,0,10);
+
+  // One point cloud that re-forms into a different structure for each section of the page.
+  const N=18*18*18; // 5832 points
+  const rnd=()=>Math.random();
+  const shapes=[];
+  const make=fn=>{const a=new Float32Array(N*3);for(let i=0;i<N;i++){const v=fn(i);a[i*3]=v[0];a[i*3+1]=v[1];a[i*3+2]=v[2]}return a};
+
+  // 1. sphere (Fibonacci lattice)
+  shapes.push(make(i=>{const y=1-2*(i+.5)/N,r=Math.sqrt(1-y*y),th=i*2.399963;return[Math.cos(th)*r*2.4,y*2.4,Math.sin(th)*r*2.4]}));
+  // 2. double helix with rungs
+  shapes.push(make(i=>{const y=(rnd()-.5)*7.2,k=i%10;
+    if(k<7){const a=y*1.7+(k%2?Math.PI:0),r=1.35+(rnd()-.5)*.08;return[Math.cos(a)*r,y,Math.sin(a)*r]}
+    const a=y*1.7,u=rnd()*2-1;return[Math.cos(a)*1.35*u,y,Math.sin(a)*1.35*u]}));
+  // 3. cubic lattice
+  shapes.push(make(i=>{const x=i%18,y=Math.floor(i/18)%18,z=Math.floor(i/324);return[(x-8.5)*.27,(y-8.5)*.27,(z-8.5)*.27]}));
+  // 4. wave surface
+  shapes.push(make(i=>{const gx=i%72,gz=Math.floor(i/72),x=(gx/72-.5)*7.4,z=(gz/81-.5)*7.4;return[x,Math.sin(x*1.3)*Math.cos(z*1.3)*.75,z]}));
+  // 5. torus
+  shapes.push(make(i=>{const u=rnd()*6.2832,v=rnd()*6.2832,R=2.3,r=.85;return[(R+r*Math.cos(v))*Math.cos(u),r*Math.sin(v),(R+r*Math.cos(v))*Math.sin(u)]}));
+  const names=['Fig. 01 — Sphere','Fig. 02 — Helix','Fig. 03 — Lattice','Fig. 04 — Surface','Fig. 05 — Torus'];
+
+  // per-point scatter (used during transitions) and colour
+  const scatter=new Float32Array(N*3),col=new Float32Array(N*3);
+  for(let i=0;i<N;i++){
+    const th=rnd()*6.2832,ph=Math.acos(2*rnd()-1),d=.6+rnd()*1.6;
+    scatter[i*3]=Math.sin(ph)*Math.cos(th)*d;scatter[i*3+1]=Math.sin(ph)*Math.sin(th)*d;scatter[i*3+2]=Math.cos(ph)*d;
+    const w=.55+rnd()*.45,warm=rnd()<.22;
+    col[i*3]=warm?.80*w+.1:w;col[i*3+1]=warm?.73*w+.1:w;col[i*3+2]=warm?.58*w+.05:w;
+  }
+  const pos=new Float32Array(shapes[0]);
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+
+  // soft round sprite
+  const sc=document.createElement('canvas');sc.width=sc.height=64;const g=sc.getContext('2d');
+  const gr=g.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,'rgba(255,255,255,1)');gr.addColorStop(.35,'rgba(255,255,255,.55)');gr.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=gr;g.fillRect(0,0,64,64);
+  const mat=new THREE.PointsMaterial({size:.075,map:new THREE.CanvasTexture(sc),vertexColors:true,transparent:true,opacity:.85,depthWrite:false,blending:THREE.AdditiveBlending,sizeAttenuation:true});
+  const cloud=new THREE.Points(geo,mat);
+  const rig=new THREE.Group();rig.add(cloud);scene.add(rig);
+
+  let W=0,H=0;const m={x:0,y:0};
+  const fit=()=>{W=innerWidth;H=innerHeight;renderer.setSize(W,H,false);cam.aspect=W/H;cam.updateProjectionMatrix();};
+  addEventListener('resize',fit);fit();
+  addEventListener('pointermove',e=>{m.x=e.clientX/W*2-1;m.y=e.clientY/H*2-1;});
+
+  const ids=['top','work','capabilities','background','contact'];
+  const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+  const clock=new THREE.Clock();let shown=false,cur=-1;
+  (function frame(){
+    const t=clock.getElapsedTime(),wide=W>860;
+    // which section is the viewport centre in, and how far through the hand-over to the next one
+    const y=scrollY+H*.45,tops=ids.map(id=>document.getElementById(id).offsetTop);
+    let i=0;for(let k=0;k<ids.length;k++)if(y>=tops[k])i=k;
+    const next=Math.min(ids.length-1,i+1),span=Math.max(1,tops[next]-tops[i]);
+    const raw=next===i?0:Math.min(1,Math.max(0,(y-tops[i])/span));
+    const f=ease(Math.min(1,Math.max(0,(raw-.35)/.5)));          // morph happens in the back half of each section
+    const A=shapes[i],B=shapes[next],burst=Math.sin(f*Math.PI)*1.1;
+    for(let j=0,n=N*3;j<n;j++){
+      const a=A[j];pos[j]=a+(B[j]-a)*f+scatter[j]*burst+Math.sin(t*.7+j*.013)*.018;
+    }
+    geo.attributes.position.needsUpdate=true;
+    const lab=names[f>.5?next:i];if(lab!==cur){cur=lab;fig.textContent=lab}
+
+    rig.rotation.y=t*.09+scrollY*.0006;
+    rig.rotation.x=Math.sin(t*.12)*.12+(m.y*.12);
+    rig.rotation.z=m.x*.05;
+    const tx=wide?2.6:0,ty=wide?0:1.9;
+    rig.position.x+=(tx-rig.position.x)*.05;rig.position.y+=(ty-rig.position.y)*.05;
+    rig.scale.setScalar(wide?1:.72);
+    cam.lookAt(0,0,0);
+
+    const hero=Math.max(0,1-scrollY/(H*.9));
+    canvas.style.opacity=shown?(.42+.5*hero):0;
+    renderer.render(scene,cam);
+    if(!shown&&t>.3)shown=true;
+    requestAnimationFrame(frame);
+  })();
+}
+</script>
+<script>
+// scroll reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+// reading progress
+addEventListener('scroll',()=>{document.getElementById('bar').style.width=scrollY/Math.max(1,document.body.scrollHeight-innerHeight)*100+'%'},{passive:true});
+</script>
+</body>
+</html>
+
